@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>顧攤人員小抄｜2026測量及空間資訊研討會・詮華國土測繪</title>
+<style>
+  :root{
+    --navy:#122140;
+    --navy-2:#1B2E52;
+    --page:#F3F5F8;
+    --panel:#FFFFFF;
+    --ink:#1B2430;
+    --ink-dim:#5B6472;
+    --line:#DEE3E9;
+    --rail:#C6CFD8;
+    --blue:#2F6FD1; --blue-pale:#E4ECFB;
+    --teal:#1FB6A6; --teal-pale:#DFF6F2;
+    --green:#4CAF6B; --green-pale:#E7F5EA;
+    --air:#2F6FD1; --air-pale:#E4ECFB;
+    --land:#4CAF6B; --land-pale:#E7F5EA;
+    --sea:#1FB6A6; --sea-pale:#DFF6F2;
+    --digi:#7C5CD6; --digi-pale:#EDE7FA;
+    --sans: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Roboto Mono", "Menlo", "Consolas", monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:100%;}
+  body{
+    background:var(--page);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+    overflow-x:hidden;
+  }
+  a{color:inherit;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;
+    width:100%;
+    padding:44px 28px 40px;
+    background:var(--navy);
+    overflow:hidden;
+  }
+  header svg.wave{position:absolute;left:-40px;bottom:-30px;width:220px;height:160px;opacity:.35;}
+  header .inner{position:relative;z-index:1;max-width:900px;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:17px;
+    letter-spacing:.1em;
+    color:#6FE0CD;
+    text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:16px;
+    font-weight:700;
+  }
+  .eyebrow .dates{color:#9FB0C4;letter-spacing:.04em;}
+  h1{
+    font-size:44px;
+    line-height:1.25;
+    margin:0 0 14px;
+    font-weight:800;
+    letter-spacing:.01em;
+    color:#FFFFFF;
+  }
+  h1 span{color:#5FE3CF;}
+  .sub{
+    font-size:23px;
+    color:#B9C6D6;
+    line-height:1.7;
+    margin:16px 0 0;
+    border-left:4px solid #5FE3CF;
+    padding-left:16px;
+    max-width:640px;
+  }
+  .must{
+    margin-top:20px;
+    font-size:20px;
+    background:rgba(95,227,207,0.12);
+    border:1px solid rgba(95,227,207,0.45);
+    border-radius:10px;
+    padding:16px 20px;
+    line-height:1.65;
+    max-width:720px;
+    color:#EAF3F1;
+  }
+  .must b{color:#5FE3CF;}
+
+  /* ---------- Quick nav ---------- */
+  nav.jump{
+    position:sticky;top:0;z-index:20;
+    display:flex;gap:10px;overflow-x:auto;
+    padding:16px 20px;
+    background:rgba(255,255,255,0.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    scrollbar-width:none;
+  }
+  nav.jump::-webkit-scrollbar{display:none;}
+  nav.jump a{
+    flex:0 0 auto;
+    font-family:var(--mono);
+    font-size:17px;
+    font-weight:700;
+    padding:10px 18px;
+    border:2px solid var(--line);
+    border-radius:999px;
+    text-decoration:none;
+    color:var(--ink-dim);
+    white-space:nowrap;
+  }
+  nav.jump a:active{background:var(--teal-pale);border-color:var(--teal);color:#0E7B6E;}
+
+  main{width:100%;padding:26px 0 8px;}
+
+  /* ---------- Step (badge + rail + card) ---------- */
+  .step{position:relative;padding:0 22px 30px;scroll-margin-top:96px;}
+  .step::before{
+    content:"";position:absolute;top:0;bottom:0;left:50px;width:2px;
+    background:var(--rail);z-index:0;
+  }
+  .step:first-of-type::before{top:28px;}
+  .step:last-of-type::before{bottom:auto;height:28px;}
+  .step-head{position:relative;z-index:1;display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+  .num{
+    font-family:var(--mono);
+    font-size:20px;
+    font-weight:700;
+    color:#fff;
+    width:56px;height:56px;flex:0 0 auto;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--teal),var(--blue));
+    box-shadow:0 4px 10px rgba(31,182,166,0.35);
+  }
+  .step-title{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .step-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.12em;font-weight:700;color:var(--teal);text-transform:uppercase;}
+  .step-title h2{font-size:26px;margin:0;font-weight:800;line-height:1.3;color:var(--ink);}
+
+  .card{
+    position:relative;z-index:1;
+    margin-left:94px;
+    background:var(--panel);
+    border-left:6px solid var(--blue);
+    border-radius:4px 18px 18px 4px;
+    box-shadow:0 2px 10px rgba(18,33,64,0.06);
+    overflow:hidden;
+  }
+  .step.accent-b .num{background:linear-gradient(135deg,var(--green),var(--teal));}
+  .step.accent-b .step-eyebrow{color:var(--green);}
+  .step.accent-b .card{border-left-color:var(--green);}
+  .step.accent-c .num{background:linear-gradient(135deg,var(--blue),#5B8CF0);}
+  .step.accent-c .step-eyebrow{color:var(--blue);}
+  .step.accent-c .card{border-left-color:var(--teal);}
+
+  .card-body{padding:22px 24px 26px;font-size:22px;line-height:1.8;}
+
+  /* dept grid */
+  .dept-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px 24px 26px;}
+  .dept{
+    border-radius:16px;padding:22px 20px;color:var(--ink);
+    position:relative;overflow:hidden;
+  }
+  .dept .deco-circle{position:absolute;border-radius:50%;width:90px;height:90px;bottom:-30px;right:-30px;opacity:.5;}
+  .dept .code{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;position:relative;z-index:1;}
+  .dept .name{font-weight:800;font-size:23px;margin:6px 0 10px;position:relative;z-index:1;}
+  .dept .items{font-size:17px;line-height:1.65;position:relative;z-index:1;}
+  .dept.air{background:var(--air-pale);} .dept.air .deco-circle{background:var(--air);} .dept.air .code{color:var(--air);}
+  .dept.land{background:var(--land-pale);} .dept.land .deco-circle{background:var(--land);} .dept.land .code{color:var(--land);}
+  .dept.sea{background:var(--sea-pale);} .dept.sea .deco-circle{background:var(--sea);} .dept.sea .code{color:var(--sea);}
+  .dept.digi{background:var(--digi-pale);} .dept.digi .deco-circle{background:var(--digi);} .dept.digi .code{color:var(--digi);}
+
+  /* quote */
+  .quote{
+    position:relative;
+    background:var(--teal-pale);
+    border:2px solid var(--teal);
+    padding:24px 26px 24px 30px;
+    font-size:22px;
+    line-height:1.85;
+    margin:22px 24px;
+    border-radius:16px;
+  }
+  .quote::before{
+    content:"\201C";
+    font-family:Georgia,serif;
+    font-size:56px;
+    color:var(--teal);
+    position:absolute;left:2px;top:-6px;
+    opacity:.5;
+  }
+
+  /* mini tables */
+  table.mini{width:100%;border-collapse:separate;border-spacing:0 10px;font-size:20px;}
+  table.mini th{
+    font-family:var(--mono);font-size:15px;letter-spacing:.05em;
+    text-align:left;color:var(--ink-dim);
+    padding:0 12px 6px;text-transform:uppercase;font-weight:700;
+  }
+  table.mini td{
+    padding:18px 16px;background:var(--page);
+    vertical-align:top;
+  }
+  table.mini td:first-child{border-radius:14px 0 0 14px;font-weight:700;}
+  table.mini td:last-child{border-radius:0 14px 14px 0;color:var(--ink-dim);}
+  .memo{color:#9AA6B2;font-style:normal;font-size:16px;display:block;margin-top:5px;font-weight:400;}
+
+  .route-list{list-style:none;margin:0;padding:22px 24px 26px;}
+  .route-list li{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    padding:18px 0;border-bottom:2px solid var(--line);
+    font-size:20px;
+  }
+  .route-list li:last-child{border-bottom:none;}
+  .route-list .kw{color:var(--ink);}
+  .route-list .to{font-weight:800;font-family:var(--mono);font-size:17px;padding:8px 16px;border-radius:999px;color:#fff;white-space:nowrap;}
+  .to.air{background:var(--air);} .to.land{background:var(--land);}
+  .to.sea{background:var(--sea);} .to.digi{background:var(--digi);}
+  .to.biz{background:var(--teal);color:#fff;} .to.senior{background:var(--navy-2);}
+
+  /* 問記轉 flow */
+  .flow{display:flex;flex-direction:column;gap:0;padding:22px 24px 26px;}
+  .flow-step{
+    background:var(--page);border:2px solid var(--line);border-radius:16px;
+    padding:22px 24px;position:relative;
+  }
+  .flow-step + .flow-step{margin-top:30px;}
+  .flow-step + .flow-step::before{
+    content:"↓";position:absolute;top:-30px;left:24px;
+    color:var(--teal);font-size:26px;font-family:var(--mono);font-weight:700;
+  }
+  .flow-step .tag{
+    font-family:var(--mono);font-size:16px;color:#fff;letter-spacing:.1em;
+    background:var(--teal);display:inline-block;padding:4px 14px;border-radius:999px;font-weight:700;
+  }
+  .flow-step .txt{font-size:21px;margin-top:10px;line-height:1.6;color:var(--ink);}
+
+  /* checklist */
+  .progress{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 24px;background:var(--teal-pale);
+    font-family:var(--mono);font-size:18px;font-weight:700;color:#0E7B6E;
+  }
+  .progress-bar{flex:1;height:10px;background:#fff;border-radius:6px;margin:0 16px;overflow:hidden;}
+  .progress-bar i{display:block;height:100%;width:0%;background:var(--teal);transition:width .25s;}
+  ul.checklist{list-style:none;margin:0;padding:8px 16px 24px;}
+  ul.checklist li{margin:0;}
+  ul.checklist label{
+    display:flex;align-items:center;gap:16px;
+    padding:16px 8px;border-bottom:2px solid var(--line);
+    font-size:20px;cursor:pointer;
+  }
+  ul.checklist li:last-child label{border-bottom:none;}
+  ul.checklist input{
+    appearance:none;-webkit-appearance:none;
+    width:28px;height:28px;flex:0 0 auto;
+    border:2.5px solid var(--rail);border-radius:8px;
+    display:grid;place-content:center;
+  }
+  ul.checklist input::before{
+    content:"";width:16px;height:16px;
+    clip-path:polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 45% 62%);
+    background:var(--teal);transform:scale(0);transition:transform .12s;
+  }
+  ul.checklist input:checked::before{transform:scale(1);}
+  ul.checklist input:checked ~ span{color:#9AA6B2;text-decoration:line-through;text-decoration-color:var(--line);}
+
+  /* roster */
+  .day-tabs{display:flex;gap:10px;padding:22px 24px 0;}
+  .day-tab{
+    font-family:var(--mono);font-size:18px;font-weight:700;padding:12px 20px;
+    border:2px solid var(--line);border-radius:999px;
+    background:var(--page);color:var(--ink-dim);cursor:pointer;
+  }
+  .day-tab.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .roster{padding:20px 24px 26px;display:none;}
+  .roster.active{display:block;}
+  .roster-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .roster-card{border:2px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--page);}
+  .roster-card .dept-label{
+    font-family:var(--mono);font-size:15px;font-weight:700;color:#fff;
+    display:inline-block;padding:5px 12px;border-radius:999px;margin-bottom:12px;
+  }
+  .roster-card input{
+    width:100%;border:none;border-bottom:2px solid var(--line);
+    background:transparent;font-size:19px;padding:8px 2px;
+    font-family:var(--sans);color:var(--ink);margin-bottom:8px;
+  }
+  .roster-card input:focus{outline:none;border-bottom-color:var(--teal);}
+  .roster-card input::placeholder{color:#9AA6B2;font-family:var(--mono);font-size:15px;}
+
+  footer{
+    position:relative;
+    width:100%;margin-top:16px;padding:56px 28px 46px;
+    text-align:center;background:var(--navy);overflow:hidden;
+  }
+  .plate{
+    position:relative;z-index:1;
+    display:inline-block;border:2px solid #5FE3CF;
+    padding:28px 30px;border-radius:20px;
+    font-size:22px;line-height:1.8;color:#EAF3F1;
+    background:rgba(95,227,207,0.1);
+    max-width:640px;
+    font-weight:600;
+  }
+  .foot-note{
+    position:relative;z-index:1;
+    font-family:var(--mono);font-size:16px;color:#8FA0B6;
+    margin-top:20px;letter-spacing:.05em;
+  }
+
+  /* ---------- Mobile layout tuning ---------- */
+  @media (max-width:600px){
+    .step{padding:0 16px 26px;scroll-margin-top:104px;}
+    .step::before{left:38px;}
+    .step:first-of-type::before{top:24px;}
+    .step:last-of-type::before{height:24px;}
+    .num{width:44px;height:44px;font-size:16px;}
+    .step-head{gap:12px;}
+    .card{margin-left:72px;}
+    .dept-grid{grid-template-columns:1fr;padding:18px 18px 20px;}
+    .roster-grid{grid-template-columns:1fr;}
+    .route-list li{flex-direction:column;align-items:flex-start;gap:10px;}
+    .route-list .to{align-self:flex-start;}
+    nav.jump a{padding:9px 15px;font-size:15px;}
+  }
+
+  @media (max-width:380px){
+    h1{font-size:34px;}
+    .sub{font-size:19px;}
+    .card-body,.quote,table.mini,.route-list li,.flow-step .txt{font-size:18px;}
+    .step{padding:0 14px 24px;}
+    .step::before{left:34px;}
+    .num{width:40px;height:40px;font-size:14px;}
+    .card{margin-left:64px;}
+    .step-title h2{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="wave" viewBox="0 0 220 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-10 140 Q40 80 90 130 T190 100" stroke="#5FE3CF" stroke-width="2"/>
+    <path d="M-10 110 Q40 50 90 100 T190 70" stroke="#5FE3CF" stroke-width="2"/>
+    <path d="M-10 80 Q40 20 90 70 T190 40" stroke="#5FE3CF" stroke-width="2"/>
+  </svg>
+  <div class="inner">
+    <div class="eyebrow">
+      2026 測量及空間資訊研討會　<span class="dates">08-20 ・ 08-21</span>
+    </div>
+    <h1>詮華國土測繪｜<span>顧攤人員小抄</span></h1>
+    <p class="sub">詮華國土測繪股份有限公司成立超過 50 年，提供從陸、海、空測繪，到空間資訊與數位應用的整合服務。</p>
+    <div class="must"><b>新人至少記得：</b>今年詮華有兩個專案，同時獲得「空間資訊永續應用獎－數位治理組優良獎」。若專業同仁不在，多問一句：「您目前有沒有正在規劃或遇到的測繪、圖資或GIS需求？」</div>
+  </div>
+</header>
+
+<nav class="jump" id="jumpnav">
+  <a href="#s01">01 認識</a>
+  <a href="#s02">02 開場</a>
+  <a href="#s03">03 得獎</a>
+  <a href="#s04">04 影片</a>
+  <a href="#s05">05 分流</a>
+  <a href="#s06">06 不猜</a>
+  <a href="#s07">07 問記轉</a>
+  <a href="#s08">08 任務</a>
+  <a href="#s09">09 值班</a>
+</nav>
+
+<main>
+
+  <div class="step" id="s01">
+    <div class="step-head">
+      <span class="num">01</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 01</span><h2>30 秒認識詮華</h2></div>
+    </div>
+    <div class="card">
+      <div class="dept-grid">
+        <div class="dept air">
+          <div class="deco-circle"></div>
+          <div class="code">AIR / 空</div>
+          <div class="name">航空測量</div>
+          <div class="items">航空攝影・空載LiDAR<br>True Orthophoto・3D Mesh</div>
+        </div>
+        <div class="dept land">
+          <div class="deco-circle"></div>
+          <div class="code">LAND / 陸</div>
+          <div class="name">地面測量</div>
+          <div class="items">控制・地形・工程測量<br>行動測繪・高精地圖</div>
+        </div>
+        <div class="dept sea">
+          <div class="deco-circle"></div>
+          <div class="code">SEA / 海</div>
+          <div class="name">水深測量</div>
+          <div class="items">河川・水庫・港灣・海洋<br>多音束測深・海纜調查</div>
+        </div>
+        <div class="dept digi">
+          <div class="deco-circle"></div>
+          <div class="code">DIGI / 智</div>
+          <div class="name">數資 / GIS</div>
+          <div class="items">GIS・空間資料庫・3D城市<br>數位孿生・Dashboard・AI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step accent-b" id="s02">
+    <div class="step-head">
+      <span class="num">02</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 02</span><h2>有人走到攤位，可以這樣說</h2></div>
+    </div>
+    <div class="card">
+      <div class="quote">您好，我們是詮華國土測繪，主要提供陸、海、空整合測繪服務，從航空攝影、LiDAR、地面與水深測量，到地形圖、3D模型、GIS及AI應用都有完整團隊。今年我們也有兩項成果獲得空間資訊永續應用獎，現場都有展示，歡迎參觀。</div>
+    </div>
+  </div>
+
+  <div class="step accent-c" id="s03">
+    <div class="step-head">
+      <span class="num">03</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 03</span><h2>今年一定要會介紹的兩項得獎成果</h2></div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <table class="mini">
+          <tr><th>得獎專案</th><th>一句話記憶</th></tr>
+          <tr>
+            <td>新北市1/1000航測地形圖<br>永續應用發展<span class="memo">第3屆（115）空間資訊永續應用獎・數位治理組優良獎</span></td>
+            <td>航測地形圖不只交付成果，更持續支援城市治理與永續應用。</td>
+          </tr>
+          <tr>
+            <td>時空地籍資料模型<br>－以臺南市為例<span class="memo">第3屆（115）空間資訊永續應用獎・數位治理組優良獎</span></td>
+            <td>把地籍資料加入時間維度，讓空間資訊能呈現歷程與治理價值。</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="s04">
+    <div class="step-head">
+      <span class="num">04</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 04</span><h2>看到螢幕影片，要知道在展示什麼</h2></div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <table class="mini">
+          <tr><th>展示影片</th><th>一句話記憶</th></tr>
+          <tr><td>嘉義市智慧城市展</td><td>測繪成果如何進一步應用到智慧城市與政府治理。</td></tr>
+          <tr><td>測深光達 LAS</td><td>詮華的測量能力不只在陸地，也延伸到水下。</td></tr>
+          <tr><td>成大榕樹炭匯</td><td>測繪技術與永續、碳匯的跨域應用。</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="step accent-b" id="s05">
+    <div class="step-head">
+      <span class="num">05</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 05</span><h2>客戶問這些，找哪個部門？</h2></div>
+    </div>
+    <div class="card">
+      <ul class="route-list">
+        <li><span class="kw">航拍、LiDAR、正射影像、3D Mesh</span><span class="to air">航測</span></li>
+        <li><span class="kw">控制點、地形圖、工程測量、GNSS</span><span class="to land">地測</span></li>
+        <li><span class="kw">水深、多音束、水庫、港灣、海洋、海纜</span><span class="to sea">水深</span></li>
+        <li><span class="kw">GIS、系統、資料庫、3D、Dashboard、AI</span><span class="to digi">數資</span></li>
+        <li><span class="kw">專案合作、預算、報價、標案</span><span class="to biz">業務</span></li>
+        <li><span class="kw">不知道屬於哪個部門</span><span class="to senior">當班資深同仁</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step accent-c" id="s06">
+    <div class="step-head">
+      <span class="num">06</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 06</span><h2>不知道答案，千萬不要猜</h2></div>
+    </div>
+    <div class="card">
+      <div class="quote">這部分是我們○○部門的專業，我請負責的同仁為您進一步說明。</div>
+      <div class="quote">我先幫您記錄需求與聯絡方式，會後請相關同仁再跟您聯繫。</div>
+    </div>
+  </div>
+
+  <div class="step" id="s07">
+    <div class="step-head">
+      <span class="num">07</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 07</span><h2>重要客戶：記住「問・記・轉」</h2></div>
+    </div>
+    <div class="card">
+      <div class="flow">
+        <div class="flow-step"><div class="tag">問</div><div class="txt">您是哪個單位？目前比較關心哪方面？</div></div>
+        <div class="flow-step"><div class="tag">記</div><div class="txt">姓名／單位／聯絡方式／需求</div></div>
+        <div class="flow-step"><div class="tag">轉</div><div class="txt">找到相對應的技術或業務同仁</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step accent-b" id="s08">
+    <div class="step-head">
+      <span class="num">08</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 08</span><h2>跨部門同仁顧攤任務</h2></div>
+    </div>
+    <div class="card">
+      <div class="progress">
+        <span>完成進度</span>
+        <span class="progress-bar"><i id="progFill"></i></span>
+        <span id="progText">0 / 8</span>
+      </div>
+      <ul class="checklist" id="checklist">
+        <li><label><input type="checkbox"><span>認識 3 位不同部門同仁</span></label></li>
+        <li><label><input type="checkbox"><span>知道航測、地測、水深、數資各自在做什麼</span></label></li>
+        <li><label><input type="checkbox"><span>能用 30 秒介紹詮華</span></label></li>
+        <li><label><input type="checkbox"><span>能說出公司今年 2 項得獎成果</span></label></li>
+        <li><label><input type="checkbox"><span>聽 2 場研討會演講</span></label></li>
+        <li><label><input type="checkbox"><span>看 3 個其他單位／公司攤位</span></label></li>
+        <li><label><input type="checkbox"><span>認識 1 位外部來賓</span></label></li>
+        <li><label><input type="checkbox"><span>帶回 1 個值得公司學習的新技術／新想法</span></label></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step accent-c" id="s09">
+    <div class="step-head">
+      <span class="num">09</span>
+      <div class="step-title"><span class="step-eyebrow">STEP 09</span><h2>今日值班聯絡表（現場填寫）</h2></div>
+    </div>
+    <div class="card">
+      <div class="day-tabs" id="dayTabs">
+        <div class="day-tab active" data-day="1">DAY 1・08-20</div>
+        <div class="day-tab" data-day="2">DAY 2・08-21</div>
+      </div>
+      <div class="roster active" data-day="1"><div class="roster-grid" id="roster1"></div></div>
+      <div class="roster" data-day="2"><div class="roster-grid" id="roster2"></div></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="plate">「不知道沒關係，知道詮華有誰會，<br>幫客戶找到對的人，就是最好的顧攤。」</div>
+  <div class="foot-note">詮華國土測繪股份有限公司 ・ 顧攤人員速查手冊</div>
+</footer>
+
+<script>
+  var boxes = document.querySelectorAll('#checklist input[type=checkbox]');
+  var fill = document.getElementById('progFill');
+  var text = document.getElementById('progText');
+  function updateProgress(){
+    var checked = 0;
+    boxes.forEach(function(b){ if(b.checked) checked++; });
+    fill.style.width = (checked/boxes.length*100) + '%';
+    text.textContent = checked + ' / ' + boxes.length;
+  }
+  boxes.forEach(function(b){ b.addEventListener('change', updateProgress); });
+  updateProgress();
+
+  var depts = [
+    {code:'航測', color:'var(--air)'},
+    {code:'地測', color:'var(--land)'},
+    {code:'水深', color:'var(--sea)'},
+    {code:'GIS+數資', color:'var(--digi)'},
+    {code:'業務/統籌', color:'var(--teal)'}
+  ];
+  function buildRoster(containerId){
+    var el = document.getElementById(containerId);
+    depts.forEach(function(d){
+      var card = document.createElement('div');
+      card.className = 'roster-card';
+      var label = document.createElement('div');
+      label.className = 'dept-label';
+      label.style.background = d.color;
+      var nameInput = document.createElement('input');
+      nameInput.placeholder = '姓名';
+      var phoneInput = document.createElement('input');
+      phoneInput.placeholder = '電話';
+      phoneInput.style.marginBottom = '0';
+      label.textContent = d.code;
+      card.appendChild(label);
+      card.appendChild(nameInput);
+      card.appendChild(phoneInput);
+      el.appendChild(card);
+    });
+  }
+  buildRoster('roster1');
+  buildRoster('roster2');
+
+  document.querySelectorAll('.day-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.day-tab').forEach(function(t){ t.classList.remove('active'); });
+      document.querySelectorAll('.roster').forEach(function(r){ r.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelector('.roster[data-day="'+tab.dataset.day+'"]').classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('nav.jump a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+</script>
+
+</body>
+</html>
